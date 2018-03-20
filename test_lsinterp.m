@@ -26,6 +26,10 @@ t = cumsum(rand(L,1));
 % Observational noise covariance matrix
 N = 0.2^2*eye(length(y)); % e.g., no error covariance between observations
 
+% Estimate and subtract the mean
+ym = get_ym(y,t,N);
+ymm = y-ym;
+
 %%
 % Compute and plot interpolation
 
@@ -38,10 +42,8 @@ close all
 [yi,P,S,ym,yms] = lsinterp(ymm,t,tp,N);
 se = sqrt(diag(P));
 hold on
-ciplot(yi-se,yi+se,tp)
+ciplot(yi-se,yi+se,tp,[.8 .8 1])
 plot(tp,yi,'k')
 
 % Overlay the mean-removed raw time series
-ym = get_ym(y,t,N);
-ymm = y-ym;
-plot(t,ymm,'rd','markerfacecolor','r')
+plot(t,ymm,'bd','markerfacecolor','b')
